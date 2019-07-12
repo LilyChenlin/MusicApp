@@ -1,17 +1,22 @@
 <!--  -->
 <template>
-  <scroll @scroll="scroll" 
+  <scroll @scroll="scroll"
           class="listview"
           :probe-type="probeType"
-          :data="data"  
-          ref="listview" 
+          :data="data"
+          ref="listview"
           :listenScroll = "listenScroll"
   >
       <ul>
           <li v-for="group in data" class="list-group" :key="group.index" ref="listGroup">
             <h2 class="list-group-title">{{group.title}}</h2>
             <ul>
-                <li v-for="item in group.items" :key="item.index" class="list-group-item">
+                <li 
+                    v-for="item in group.items" 
+                    :key="item.index" 
+                    class="list-group-item"
+                    @click="select(item)" 
+                >
                     <img v-lazy="item.avatar" class="avatar">
                     <span class="name">{{item.name}}</span>
                 </li>
@@ -25,15 +30,22 @@
               </li>
           </ul>
       </div>
+      <div class="list-fixed" v-show="fixedTitle" ref="fixed">
+        <div class="fixed-title">{{fixedTitle}}</div>
+      </div>
+      <div class="loading-container" v-show="!data.length">
+        <Loading></Loading>
+      </div>
   </scroll>
 </template>
 
 <script>
 import scroll from '../scroll/scroll'
 import {getData} from '../../common/js/dom'
-
+import Loading from '../loading/loading'
 //  设置描点的高度 该高度为css中设置
 const ANCHOR_HEIGHT = 18
+const TITLE_HEIGHT = 30
 export default {
   created () {
     this.touch = {}
@@ -44,13 +56,14 @@ export default {
   data () {
     return {
       currentIndex: 0,
-      scrollY: -1
+      scrollY: -1,
+      diff: -1
     }
   },
   props: {
     data: {
       type: Array,
-      default: [],
+      default: []
     }
   },
   computed: {
@@ -58,9 +71,18 @@ export default {
       return this.data.map((group) => {
         return group.title.substr(0, 1)
       })
+    },
+    fixedTitle () {
+      if (scrollY > 0) {
+        return
+      }
+      return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
     }
   },
   methods: {
+    select (item) {
+      this.$emit('select', item)
+    },
     onShortcutTouchStart (e) {
       let anchoIndex = getData(e.target, 'index')
       // 获取第一次点击时的位置
@@ -85,7 +107,7 @@ export default {
 
     _scrollTo (index) {
       // console.log(index)
-      if (!index && index!==0) {
+      if (!index && index !== 0) {
         return
       }
 
@@ -102,7 +124,7 @@ export default {
       const list = this.$refs.listGroup
       // console.log(list.length)
       let height = 0
-      // this.listHeight.push(height)
+      this.listHeight.push(height)
       for (let i = 0; i < list.length; i++) {
         let item = list[i]
         height += item.clientHeight
@@ -119,29 +141,37 @@ export default {
     },
     scrollY (newY) {
       const listHeight = this.listHeight
-      //当滚动到顶部
+      // 当滚动到顶部
       if (newY > 0) {
         this.currentIndex = 0
         return
       }
       // 在中间滚动
-      for (let i = 0; i < listHeight.length - 1 ; i++) {
+      for (let i = 0; i < listHeight.length - 1; i++) {
         let height1 = listHeight[i]
         let height2 = listHeight[i + 1]
         if (-newY >= height1 && -newY < height2) {
           this.currentIndex = i
-          console.log(this.currentIndex)
+          // console.log(this.currentIndex)
+          this.diff = height2 + newY
           return
         }
       }
-      //当滚动到底部
+      // 当滚动到底部
       this.currentIndex = listHeight.length - 2
-
+    },
+    diff (newVal) {
+      let fixTop = (newVal > 0 && newVal < TITLE_HEIGHT) ? newVal - TITLE_HEIGHT : 0
+      if (this.fixTop === fixTop) {
+        return
+      }
+      this.fixTop = fixTop
+      this.$refs.fixed.style.transform = `transform3d(0,${fixTop},0)`
     }
-
   },
   components: {
-    scroll
+    scroll,
+    Loading
   }
 }
 
