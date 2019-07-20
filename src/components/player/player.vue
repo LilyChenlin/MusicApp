@@ -37,7 +37,7 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <progressBar :percent="percent"></progressBar>
+              <progressBar :percent="percent" @percentChange="onProgressBarChange"></progressBar>
             </div>
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
@@ -61,7 +61,7 @@
         </div>
       </div>
     </transition>
-    <transition name="mini"> 
+    <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="open">
         <div class="icon">
           <img  width="40" height="40" :src="currentSong.image" :class="cdCls">
@@ -75,7 +75,7 @@
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
-        </div>        
+        </div>
       </div>
     </transition>
     <audio :src="currentSong.url" ref="audio" @play="ready" @error="error" @timeupdate="updateTime"></audio>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import {mapGetters,mapMutations} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 import animations from 'create-keyframe-animation'
 import {prefixStyle} from '../../common/js/dom'
 import progressBar from '../../base/progress-bar/progress-bar'
@@ -110,7 +110,7 @@ export default {
       return this.playing ? 'icon-pause' : 'icon-play'
     },
     miniIcon () {
-      return this.playing ? 'icon-pause-mini': 'icon-play-mini'
+      return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
     },
     disableCls () {
       return this.songReady ? '' : 'disable'
@@ -120,17 +120,11 @@ export default {
     }
   },
   watch: {
-    currentSong () {
-      this.$nextTick(() => {
-        this.$refs.audio.play()
-      })
-    },
     playing (newPlaying) {
       const audio = this.$refs.audio
       this.$nextTick(() => {
-        newPlaying ? audio.play() : audio.pause() 
+        newPlaying ? audio.play() : audio.pause()
       })
-
     }
   },
   methods: {
@@ -184,8 +178,8 @@ export default {
       const paddingTop = 80
       const width = window.innerWidth * 0.8
       const scale = targetWidth / width
-      const x = -(window.innerWidth/2 - paddingLeft)
-      const y = window.innerHeight - paddingTop - paddingBottom - width/2
+      const x = -(window.innerWidth / 2 - paddingLeft)
+      const y = window.innerHeight - paddingTop - paddingBottom - width / 2
       return {
         x,
         y,
@@ -194,7 +188,7 @@ export default {
     },
     prev () {
       if (!this.songReady) {
-        return 
+        return
       }
       let index = this.currentIndex - 1
       if (index === -1) {
@@ -208,10 +202,10 @@ export default {
     },
     next () {
       if (!this.songReady) {
-        return 
+        return
       }
       let index = this.currentIndex + 1
-      if (index === this.playList.length ) {
+      if (index === this.playList.length) {
         index = 0
       }
       this.setCurrentIndex(index)
@@ -228,7 +222,7 @@ export default {
     },
     togglePlaying () {
       if (!this.songReady) {
-        return 
+        return
       }
       this.setPlayingState(!this.playing)
     },
@@ -240,15 +234,22 @@ export default {
       const minute = interval / 60 | 0
       const second = this._pad(interval % 60)
       return `${minute}:${second}`
-    },  
+    },
     _pad (num, n = 2) {
       let len = num.toString().length
       // console.log(num.toString())
       while (len < n) {
         num = '0' + num
-        len ++
+        len++
       }
       return num
+    },
+    onProgressBarChange (percent) {
+      const currentTime = this.currentSong.duration * percent
+      this.$refs.audio.currentTime = currentTime
+      if (!this.playing) {
+        this.togglePlaying()
+      }
     },
     ...mapMutations({
       setFullScreen: 'SET_FULLSCREEN',
@@ -259,8 +260,7 @@ export default {
   components: {
     progressBar
   }
-
-} 
+}
 
 </script>
 <style lang="stylus" scoped>

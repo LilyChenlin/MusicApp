@@ -8,23 +8,23 @@
         </div>
       </li>
     </ul>
-  </div> 
+  </div>
 </template>
 
 <script>
 export default {
   props: {
     songs: {
-        type: Array,
-        default: []
+      type: Array,
+      default: []
     }
   },
   methods: {
     getDesc (song) {
       return `${song.singer} · ${song.album}`
     },
-    selectSong (song,index) {
-      this.$emit ('select', song,index)
+    selectSong (song, index) {
+      this.$emit('select', song, index)
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
-  <div class="progress-bar" ref="progressBar">
+  <div class="progress-bar" ref="progressBar" @click="progressClick">
     <div class="bar-inner">
       <div class="progress" ref="progress"></div>
-      <div class="progress-btn-wrapper" 
+      <div class="progress-btn-wrapper"
            ref="progressBtn"
            @touchstart.prevent = "progressTouchStart"
            @touchmove.prevent = "progressTouchMove"
@@ -15,54 +15,63 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {prefixStyle} from '../../common/js/dom'
-  const transform = prefixStyle('transform')
-  const progressBtnWidth = 16
-  export default {
-    props: {
-      percent: {
-        type: Number,
-        default: 0
-      } 
-    },
-    created () {
-      this.touch = {}
-    },
-    watch: {
-      percent (newPercent) {
-        if (newPercent >= 0 ){
-          const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-          const offsetWidth = newPercent * barWidth
-          this._offset(offsetWidth)
-        }
-      }
-    },
-    methods: {
-      _offset (offsetWidth) {
-        this.$refs.progress.style.width = `${offsetWidth}px`
-        this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`
-      },
-      progressTouchStart (e) {
-        this.touch.initiated = true
-        this.touch.startX = e.touches[0].pageX
-        this.touch.left = this.$refs.progress.clientWidth
-        // console.log(this.touch.left)
-      },
-      progressTouchMove (e) {
-        if (!this.initiated) {
-          return
-        }
-        // deltax拖拉进度条移动的长度
-        const deltaX = e.touches[0].pageX - this.touch.startX
-        const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
-        console.log(offsetWidth)
+import {prefixStyle} from '../../common/js/dom'
+const transform = prefixStyle('transform')
+const progressBtnWidth = 16
+export default {
+  props: {
+    percent: {
+      type: Number,
+      default: 0
+    }
+  },
+  created () {
+    this.touch = {}
+  },
+  watch: {
+    percent (newPercent) {
+      if (newPercent >= 0) {
+        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+        const offsetWidth = newPercent * barWidth
         this._offset(offsetWidth)
-      },
-      progressTouchEnd () {
-        this.touch.initiated = false
       }
     }
+  },
+  methods: {
+    _offset (offsetWidth) {
+      this.$refs.progress.style.width = `${offsetWidth}px`
+      this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px, 0, 0)`
+    },
+    progressTouchStart (e) {
+      this.touch.initiated = true
+      this.touch.startX = e.touches[0].pageX
+      this.touch.left = this.$refs.progress.clientWidth
+      // console.log(this.touch.left)
+    },
+    progressTouchMove (e) {
+      if (!this.touch.initiated) {
+        return
+      }
+      // deltax拖拉进度条移动的长度
+      const deltaX = e.touches[0].pageX - this.touch.startX
+      const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
+      this._offset(offsetWidth)
+    },
+    progressTouchEnd () {
+      this.touch.initiated = false
+      this._triggerPercent()
+    },
+    _triggerPercent () {
+      const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+      const percent = this.$refs.progress.clientWidth / barWidth
+      this.$emit('percentChange', percent)
+    },
+    progressClick (e) {
+      this._offset(e.offsetX)
+      this._triggerPercent()
+    }
   }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

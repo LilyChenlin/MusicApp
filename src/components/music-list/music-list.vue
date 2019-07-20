@@ -14,8 +14,8 @@
       <div class="filter"></div>
     </div>
     <div class="bg-layer" ref="layer"></div>
-    <scroll :data="songs" 
-            class="list" 
+    <scroll :data="songs"
+            class="list"
             ref="list"
             :probeType= "probeType"
             :listenScroll="listenScroll"
@@ -34,7 +34,7 @@ import scroll from '../../base/scroll/scroll'
 import {mapActions} from 'vuex'
 const RESERVE_HEIGHT = 40
 export default {
-  props:{
+  props: {
     bgImage: {
       type: String,
       default: ''
@@ -44,7 +44,7 @@ export default {
       default: []
     },
     title: {
-      type:String,
+      type: String,
       default: ''
     },
     rank: {
@@ -95,7 +95,7 @@ export default {
   },
   watch: {
     scrollY (newY) {
-      let translateY = Math.max(this.minTranslateY,newY)
+      let translateY = Math.max(this.minTranslateY, newY)
       let zIndex = 0
       let scale = 1
       const percent = Math.abs(newY / this.imageHeight)
@@ -116,10 +116,7 @@ export default {
         this.$refs.bgImage.style.height = 0
         this.$refs.playBtn.style.display = ''
       }
-      this.$refs.bgImage.zIndex = zIndex 
-      
-
-
+      this.$refs.bgImage.zIndex = zIndex
       this.$refs.bgImage.style['transform'] = `scale(${scale})`
     }
   }

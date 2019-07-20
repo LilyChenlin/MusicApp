@@ -11,15 +11,15 @@
           <li v-for="group in data" class="list-group" :key="group.index" ref="listGroup">
             <h2 class="list-group-title">{{group.title}}</h2>
             <ul>
-                <li 
-                    v-for="item in group.items" 
-                    :key="item.index" 
-                    class="list-group-item"
-                    @click="select(item)" 
-                >
-                    <img v-lazy="item.avatar" class="avatar">
-                    <span class="name">{{item.name}}</span>
-                </li>
+              <li
+                v-for="item in group.items"
+                :key="item.index"
+                class="list-group-item"
+                @click="select(item)"
+              >
+                <img v-lazy="item.avatar" class="avatar">
+                <span class="name">{{item.name}}</span>
+              </li>
             </ul>
           </li>
       </ul>
