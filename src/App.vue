@@ -5,7 +5,7 @@
     <keep-alive>
       <router-view/>
     </keep-alive>
-
+    <Player></Player>
   </div>
 </template>
 
@@ -13,11 +13,13 @@
 import {getSingerLists} from './api/singer'
 import MHeader from './components/m-header/m-header.vue'
 import Tab from './components/tab/tab.vue'
+import Player from './components/player/player.vue'
 export default {
   name: 'App',
   components: {
     MHeader,
-    Tab
+    Tab,
+    Player
   },
   async mounted () {    
     const result = await getSingerLists()    
@@ -27,3 +29,4 @@ export default {
 </script>
 <style lang="stylus" scoped>
 </style>
+ 
