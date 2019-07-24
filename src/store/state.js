@@ -3,9 +3,11 @@ const state = {
   singer: {},
   playing: false,
   fullScreen: false,
-  playList: [],
-  sequenceList: [],
-  mode: playMode,
-  currentIndex: -1
+  playList: [], // 当前播放列表
+  sequenceList: [], // 歌曲顺序列表
+  mode: playMode.sequence,
+  currentIndex: -1,
+  disc: {},
+  toplist: {}
 }
 export default state

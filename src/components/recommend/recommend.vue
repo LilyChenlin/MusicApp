@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <Scroll class="recommend-content" :data="discList" ref="scroll">
       <div>
         <div class="slider-wrapper" v-if="recommends.length">
@@ -14,7 +14,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-              <li v-for="item in discList" class="item" :key="item.index">
+              <li @click="selectItem(item)" v-for="item in discList" class="item" :key="item.index">
               <div class="icon">
                 <img width="60" height="60" v-lazy="item.imgurl">
               </div>
@@ -40,7 +40,10 @@ import {ERR_OK} from '../../api/config.js'
 import Slider from '../../base/slide/slide.vue'
 import Scroll from '../../base/scroll/scroll'
 import Loading from '../../base/loading/loading'
+import {playListMixin} from '../../common/js/mixin'
+import {mapMutations} from 'vuex'
 export default {
+  mixins: [playListMixin],
   data () {
     return {
       recommends: [],
@@ -48,10 +51,17 @@ export default {
     }
   },
   created () {
+    // 轮播图
     this._getRecommend()
+    // 热门歌单推荐
     this._getDiscList()
   },
   methods: {
+    handlePlayList (playlist) {
+      const bottom = playlist.length > 0 ? '60px' : 0
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
+    },
     _getRecommend () {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
@@ -60,11 +70,18 @@ export default {
         }
       })
     },
+    selectItem (item) {
+      this.$router.push({
+        path: `/recommend/${item.dissid}`
+      })
+      // console.log(item)
+      this.setDisc(item)
+    },
     _getDiscList () {
       getDiscList().then(res => {
         if (res.code === ERR_OK) {
           this.discList = res.data.list
-          // console.log(res.data.list)
+          // console.log(this.discList)
         }
       })
     },
@@ -73,7 +90,10 @@ export default {
         this.$refs.scroll.refresh()
         this.checkLoaded = true
       }
-    }
+    },
+    ...mapMutations({
+      setDisc: 'SET_DISC'
+    })
   },
   components: {
     Slider,

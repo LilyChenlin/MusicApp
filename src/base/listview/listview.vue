@@ -104,7 +104,9 @@ export default {
       this.scrollY = pos.y
       // console.log(this.scrollY)
     },
-
+    refresh () {
+      this.$refs.listview.refresh()
+    },
     _scrollTo (index) {
       // console.log(index)
       if (!index && index !== 0) {

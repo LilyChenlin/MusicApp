@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div class="play" ref="playBtn">
+        <div class="play" ref="playBtn" @click="random" v-show="songs.length > 0">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -22,7 +22,10 @@
             @scroll="scroll"
     >
       <div class="song-list-wrapper">
-        <song-list :songs="songs" @select="selectItem"></song-list>
+        <song-list :songs="songs" @select="selectItem" :rank="rank"></song-list>
+      </div>
+      <div class="loading-container" v-show="!songs.length">
+        <Loading></Loading>
       </div>
     </scroll>
   </div>
@@ -32,8 +35,11 @@
 import songList from '../../base/song-list/song-list'
 import scroll from '../../base/scroll/scroll'
 import {mapActions} from 'vuex'
+import {playListMixin} from '../../common/js/mixin'
+import Loading from '../../base/loading/loading'
 const RESERVE_HEIGHT = 40
 export default {
+  mixins: [playListMixin],
   props: {
     bgImage: {
       type: String,
@@ -68,7 +74,8 @@ export default {
   },
   components: {
     songList,
-    scroll
+    scroll,
+    Loading
   },
   mounted () {
     this.imageHeight = this.$refs.bgImage.clientHeight
@@ -76,6 +83,11 @@ export default {
     this.$refs.list.$el.style.top = `${this.imageHeight}px`
   },
   methods: {
+    handlePlayList (playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
     scroll (pos) {
       this.scrollY = pos.y
     },
@@ -83,14 +95,20 @@ export default {
       this.$router.back()
     },
     selectItem (item, index) {
-      console.log(this.songs)
+      // console.log(this.songs)
       this.selectPlay({
         list: this.songs,
         index: index
       })
     },
+    random () {
+      this.randomPlay ({
+        list: this.songs
+      })
+    },
     ...mapActions([
-      'selectPlay'
+      'selectPlay',
+      'randomPlay'
     ])
   },
   watch: {
