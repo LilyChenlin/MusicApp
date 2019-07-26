@@ -125,6 +125,7 @@ export default {
   },
   created () {
     this.touch = {}
+    console.log(this.currentSong)
   },
   computed: {
     ...mapGetters([

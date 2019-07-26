@@ -38,7 +38,7 @@ export default {
         if (res.status === ERR_OK) {
           this.songs = this._normalizeSongs(res.data.data)
           // console.log(res.data.data)
-          // console.log(this.songs)
+          console.log(this.songs)
         }
       })
     },

@@ -11,6 +11,7 @@ export default class Song {
     this.url = url
   }
   getLyric () {
+    console.log('获取歌词')
     if (this.lyric) {
       return Promise.resolve(this.lyric)
     }
@@ -76,3 +77,16 @@ export function createTopListSong (musicData) {
     url: `https://v1.itooi.cn/tencent/url?id=${musicData.mid}&quality=128`
   })
 }
+
+// export function createInsertSong (musicData) {
+//   return new Song({
+//     id: musicData.id,
+//     mid: musicData.mid,
+//     singer: musicData.singer,
+//     name: musicData.name,
+//     album: musicData.album,
+//     duration: musicData.duration,
+//     image: musicData.image,
+//     url: musicData.url
+//   })
+// }
