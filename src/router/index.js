@@ -5,10 +5,11 @@ import Recommend from '../components/recommend/recommend.vue'
 import Singer from '../components/singer/singer.vue'
 import Rank from '../components/rank/rank.vue'
 import Search from '../components/search/search.vue'
-import UserCenter from '../components/user-center/user-center.vue'
+import Login from '../components/login/login.vue'
 import SingerDetail from '../components/singer-detail/singer-detail.vue'
 import Disc from '../components/disc/disc.vue'
 import TopList from '../components/top-list/top-list.vue'
+import UserCenter from '../components/userCenter/userCenter.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -58,7 +59,11 @@ export default new Router({
       ]
     },
     {
-      path: '/usercenter',
+      path: '/Login',
+      component: Login
+    },
+    {
+      path: '/userCenter',
       component: UserCenter
     }
   ]

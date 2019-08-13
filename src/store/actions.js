@@ -79,3 +79,7 @@ export const insertSong = function ({commit, state}, song) {
   commit(types.SET_FULLSCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
 }
+
+export const recordUser = function ({commit}, userInfo) {
+  commit(types.SET_USER_INFO, {userInfo})
+}

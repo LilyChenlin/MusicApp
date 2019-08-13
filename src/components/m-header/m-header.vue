@@ -2,15 +2,21 @@
 <template>
     <div class="m-header">
         <div class="icon"></div>
-        <h1 class="text">Chicken Music</h1>
-        <router-link tag="div" class="mine" to="/user">
-            <i class="icon-mine"></i>
+        <h1 class="text">Music</h1>
+        <router-link tag="div" class="mine" :to="userInfo.id ? '/userCenter' : '/login'">
+            <i class="icon-mine" v-if="userInfo.id"></i>
+            <span class="login" v-else>登录</span>
         </router-link>
     </div>
 </template>
 
 <script>
-export default {}
+import { mapState} from 'vuex'
+export default {
+  computed: {
+    ...mapState(['userInfo'])
+  }
+}
 </script>
 <style lang="stylus" scoped>
     @import '../../common/stylus/mixin.styl';
@@ -36,10 +42,19 @@ export default {}
       vertical-align: top
       line-height: 44px
       font-size: $font-size-large
+    .login 
+      position: absolute
+      display: inline-block
+      width: 40px
+      top: 15px
+      right: 30px
+      color: $color-theme
+      font-size: $font-size-large
     .mine
       position: absolute
       top: 0
       right: 0
+      
       .icon-mine
         display: block
         padding: 12px
