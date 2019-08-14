@@ -10,11 +10,11 @@ export function getCode (phone) {
 }
 
 // 手机验证码登录
-export function phoneLogin (phone, captcha) {
-  const url = BASE_URL + '/captcha/verify'
+export function phoneLogin (phone, password) {
+  const url = BASE_URL + '/login/cellphone'
   const data = Object.assign({}, {
     phone: phone,
-    captcha: captcha
+    password: password
   })
   return jsonp(url, data)
 }

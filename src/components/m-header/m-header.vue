@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState} from 'vuex'
+import {mapState} from 'vuex'
 export default {
   computed: {
     ...mapState(['userInfo'])
@@ -42,7 +42,7 @@ export default {
       vertical-align: top
       line-height: 44px
       font-size: $font-size-large
-    .login 
+    .login
       position: absolute
       display: inline-block
       width: 40px
@@ -54,7 +54,6 @@ export default {
       position: absolute
       top: 0
       right: 0
-      
       .icon-mine
         display: block
         padding: 12px

@@ -13,15 +13,12 @@
             <!-- 手机登录 -->
             <section class="login_message">
               <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
-              <button  class="get_verification" :disabled="!rightPhone" :class="{right_phone:rightPhone}" @click.prevent="getCode">
-                {{computeTime>0 ? `已发送(${computeTime}s)` : '获取验证码'}}
-              </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码" v-model="captcha"> 
+              <input type="password" maxlength="20" placeholder="密码" v-model="password">
             </section>
           </div>
-          <div :class="{on:currentIndex === 1}"> 
+          <div :class="{on:currentIndex === 1}">
             <!-- 邮箱登录 -->
             <section>
               <section class="login_message">
@@ -51,122 +48,139 @@ import AlertTip from '../../base/alertTip/alertTip'
 import Switches from '../../base/switches/switches'
 import {getCode, phoneLogin, emailLogin} from '../../api/login.js'
 
-  export default {
-    data () {
-      return {
-        loginWay: false, 
-        computeTime: 0,
-        phone: '',
-        currentIndex: 0, //0 手机号登录 1邮箱
-        captcha: '', //短信验证码
-        email: '',
-        password: '',
-        showPwd: false,
-        alertText: '',
-        alertShow: false, 
-        switches: [
-          {
-            name: '手机登录'
-          },
-          {
-            name: '邮箱登录'
-          }
-        ]
-      }
+export default {
+  data () {
+    return {
+      loginWay: false,
+      computeTime: 0,
+      phone: '',
+      currentIndex: 0, // 0 手机号登录 1邮箱
+      captcha: '', // 短信验证码
+      email: '',
+      password: '',
+      showPwd: false,
+      alertText: '',
+      alertShow: false,
+      switches: [
+        {
+          name: '手机登录'
+        },
+        {
+          name: '邮箱登录'
+        }
+      ]
+    }
+  },
+  computed: {
+    rightPhone () {
+      return /^1\d{10}$/.test(this.phone)
+    }
+  },
+  methods: {
+    showAlert (alertText) {
+      this.alertShow = true
+      this.alertText = alertText
     },
-    computed: {
-      rightPhone () {
-        return /^1\d{10}$/.test(this.phone)
-      }
-    },  
-    methods: {
-      showAlert (alertText) {
-        this.alertShow = true
-        this.alertText = alertText
-      },
-      closeTip () {
-        this.alertShow = false
-        this.alertText = ''
-      },
-      async getCode () {
-        if (!this.computeTime) {
-          this.computeTime = 30
-          this.intervalId = setInterval(() => {
-            this.computeTime--
-            if(this.computeTime<=0) {
-              // 停止计时
-              clearInterval(this.intervalId)
-            }
-          }, 1000)
+    closeTip () {
+      this.alertShow = false
+      this.alertText = ''
+    },
+    // async getCode () {
+    //   if (!this.computeTime) {
+    //     this.computeTime = 30
+    //     this.intervalId = setInterval(() => {
+    //       this.computeTime--
+    //       if (this.computeTime <= 0) {
+    //         // 停止计时
+    //         clearInterval(this.intervalId)
+    //       }
+    //     }, 1000)
+    //     // 发送请求 获取验证码
+    //     const result = await getCode(this.phone)
+    //     if (result.code === 200) {
+    //       alert('发送验证码成功')
+    //       if (this.computeTime) {
+    //         this.computeTime = 0
+    //         clearInterval(this.intervalId)
+    //         this.intervalId = undefined
+    //       }
+    //     }
+    //   }
+    // },
+    async login () {
+      let result
+      // 改进login方法
+      if (this.currentIndex === 0) {
+        // 手机短信登录~
+        const {rightPhone, phone, password} = this
+        if (!rightPhone) {
+          // 手机号不正确
+          this.showAlert('手机号不正确')
+          return
+        } else if (!password) {
+          this.showAlert('密码不能为空')
+          return
         }
-
-        //发送请求 获取验证码
-        const result = await getCode(this.phone)
-        if (result.code === 200) {
-          alert("发送验证码成功")
-          if (this.computeTime) {
-            this.computeTime = 0
-            clearInterval(this.intervalId)
-            this.intervalId = undefined
+        try {
+          result = await phoneLogin(phone, password)
+          if (result.data.code === 200) {
+            let user = result.data.account
+            this.$store.dispatch('recordUser', user)
+            this.$router.replace('/userCenter')
+          } else {
+            this.showAlert('请求接口失败')
           }
+        } catch (err) {
+          console.log(err)
         }
-
-      },
-      async login () {
-        let result
-        if (this.currentIndex === 0) {
-          // 手机短信登录~
-          const {rightPhone, phone, captcha} = this
-          if (!this.rightPhone) {
-            // 手机号不正确
-            this.showAlert('手机号不正确')
-            return
-          } else if (!(/^\d{4}$/.test(captcha))) {
-            this.showAlert('验证码必须是4位数')
-            return 
-          }
-          result = await phoneLogin(phone, captcha)
-        } else {
-          // 邮箱密码登录
-          const {email, password} = this
-          // 邮箱正则表达式
-          const reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
-          if (!(reg.test(this.email))) {
-            this.showAlert('邮箱格式不正确')
-          } else if (!this.password) {
-            this.showAlert('密码不为空')
-          }
+      } else {
+        // 邮箱密码登录
+        const {email, password} = this
+        // 邮箱正则表达式
+        const reg = new RegExp('^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$')
+        if (!(reg.test(email))) {
+          this.showAlert('邮箱格式不正确')
+          return
+        } else if (!password) {
+          this.showAlert('密码不为空')
+          return
+        }
+        try {
           result = await emailLogin(email, password)
           console.log(result)
+          if (result.status === 200) {
+            // console.log('运行到这里了')
+            let user = result.data.account
+            this.$store.dispatch('recordUser', user)
+            this.$router.replace('/userCenter')
+          } else {
+            this.showAlert('请求接口失败')
+          }
+        } catch (err) {
+          console.log(err)
         }
-
-        //停止计时
-        if (this.computeTime) {
-          this.computeTime = 0
-          clearInterval(intervalId)
-          this.intervalId = undefined
-        }
-
-        // 根据结果做数据处理
-        if (result.data.code === 200) {
-          let user = result.data.account
-          console.log(user)
-          this.$store.dispatch('recordUser', user)
-          this.$router.replace('/userCenter')
-        }
-      },
-      back() {
-        this.$router.back()
-      },
-      switchItem (index) {
-        this.currentIndex = index
       }
+      // 停止计时
+      if (this.computeTime) {
+        this.computeTime = 0
+        clearInterval(this.intervalId)
+        this.intervalId = undefined
+      }
+      // 根据结果做数据处理
+      
     },
-    components: {
-      Switches,
-      AlertTip
+    back () {
+      this.$router.back()
+    },
+    switchItem (index) {
+      this.currentIndex = index
     }
+  },
+  components: {
+    Switches,
+    AlertTip
   }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
