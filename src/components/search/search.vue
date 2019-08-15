@@ -33,47 +33,48 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import SearchBox from '../../base/search-box/search-box'
-  import Scroll from '../../base/scroll/scroll'
-  import Suggest from '../../components/suggest/suggest'
-  import {getHotKey} from '../../api/search'
-  import {ERR_OK, commonParams} from '../../api/config'
-  export default {
-    created () {
-      this._getHotKey()
-    },
-    data () {
-      return {
-        hotkey: [],
-        query: ''
-      }
-    },
-    methods: {
-      addQuery (query) {
-        this.$refs.searchBox.setQuery(query) 
-      },
-      onQueryChange (query) {
-        this.query = query
-      },
-      blurInput () {
-        console.log('blurInput')
-      },
-      _getHotKey () {
-        getHotKey().then((res) => {
-          if (res.code === ERR_OK) {
-            console.log(res.data.hotkey)
-            // 截取热门关键词前10条
-            this.hotkey = res.data.hotkey.slice(0,10)
-          }
-        })
-      }
-    },
-    components: {
-      SearchBox,
-      Scroll,
-      Suggest
+import SearchBox from '../../base/search-box/search-box'
+import Scroll from '../../base/scroll/scroll'
+import Suggest from '../../components/suggest/suggest'
+import {getHotKey} from '../../api/search'
+import {ERR_OK} from '../../api/config'
+export default {
+  created () {
+    this._getHotKey()
+  },
+  data () {
+    return {
+      hotkey: [],
+      query: ''
     }
+  },
+  methods: {
+    addQuery (query) {
+      this.$refs.searchBox.setQuery(query)
+    },
+    onQueryChange (query) {
+      this.query = query
+    },
+    blurInput () {
+      console.log('blurInput')
+    },
+    _getHotKey () {
+      // 热门搜索功能
+      getHotKey().then((res) => {
+        if (res.code === ERR_OK) {
+          console.log(res.data.hotkey)
+          // 截取热门关键词前10条
+          this.hotkey = res.data.hotkey.slice(0, 10)
+        }
+      })
+    }
+  },
+  components: {
+    SearchBox,
+    Scroll,
+    Suggest
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

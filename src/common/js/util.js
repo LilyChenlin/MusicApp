@@ -20,3 +20,16 @@ export function validateEmail (email) {
   const reg = new RegExp('^[a-z0-9] + ([._\\-] * [a-z0-9]) * @([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$')
   return reg.test(email)
 }
+
+export function debounce (func, delay) {
+  let timer
+  return function (...args) {
+    // 如果定时器还存在
+    if (timer) {
+      clearTimeout(timer)
+    }
+    setTimeout(() => {
+      func.apply(this, args)
+    }, delay)
+  }
+}

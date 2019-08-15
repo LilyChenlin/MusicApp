@@ -46,7 +46,7 @@
 <script type="text/ecmascript-6">
 import AlertTip from '../../base/alertTip/alertTip'
 import Switches from '../../base/switches/switches'
-import {getCode, phoneLogin, emailLogin} from '../../api/login.js'
+import {phoneLogin, emailLogin} from '../../api/login.js'
 
 export default {
   data () {
@@ -166,8 +166,6 @@ export default {
         clearInterval(this.intervalId)
         this.intervalId = undefined
       }
-      // 根据结果做数据处理
-      
     },
     back () {
       this.$router.back()
@@ -216,9 +214,8 @@ export default {
           &.on
             display block
           input
-            
             width 100%
-            height 100% 
+            height 100%
             background $color-highlight-background
             padding-left 10px
             box-sizing border-box

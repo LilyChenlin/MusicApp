@@ -1,8 +1,6 @@
 import * as types from './mutation-type'
 import {playMode} from '../common/js/config'
 import {shuffle} from '../common/js/util'
-import { resolve } from 'path'
-import { reject } from 'q'
 
 function findIndex (list, song) {
   return list.findIndex((item) => {
@@ -34,22 +32,25 @@ export const randomPlay = function ({commit}, {list}) {
 }
 
 export const insertSong = function ({commit, state}, song) {
+  console.log('执行到这里了')
   // 必须要返回一个副本，否则就会在mutation回调外修改state 给予警告
   let playList = state.playList.slice()
   // console.log(playList)
+  // 当前播放列表
   let sequenceList = state.sequenceList.slice()
   // console.log(sequenceList)
-  let currentIndex = state.currenIndex
+  let currentIndex = state.currentIndex
   // 记录当前正在播放的歌曲
   let currentSong = playList[currentIndex]
   // 查找当前播放歌曲是否有该插入歌曲
   let fpIndex = findIndex(playList, song)
-  // console.log(fpIndex)
+  // console.log('fpIndex:' + fpIndex)
   // 由于要插入歌曲,插入歌曲插入到当前播放歌曲后
   currentIndex++
+  // console.log('currentIndex0:' + currentIndex)
   // 插入这首歌到当前索引位置
   playList.splice(currentIndex, 0, song)
-  // console.log(playList)
+  console.log(playList)
   // 如果已经包含了这首歌，由于还是要插入这首歌，所以需要把playlist中之前就已经存在的删除
   if (fpIndex > -1) {
     // 如果被插入歌曲的序号小于列表当前播放歌曲的序号
@@ -75,11 +76,13 @@ export const insertSong = function ({commit, state}, song) {
       sequenceList.splice(fsIndex + 1, 1)
     }
   }
+  // console.log('currentIndex', currentIndex)
   commit(types.SET_PLAYLIST, playList)
   commit(types.SET_SEQUENCELIST, sequenceList)
   commit(types.SET_CURRENT_INDEX, currentIndex)
   commit(types.SET_FULLSCREEN, true)
-  commit(types.SET_PLAYING_STATE, true)
+  commit(types.SET_PLAYING, true)
+  // console.log('over')
 }
 
 export const recordUser = function ({commit}, userInfo) {
