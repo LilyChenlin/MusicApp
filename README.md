@@ -2,12 +2,8 @@
 
 > 音乐播放器
 
-![1](D:\2019.5月秋招准备\面试题\音乐播放器\1.png)
-
-![2](D:\2019.5月秋招准备\面试题\音乐播放器\2.png)
-
-![3](D:\2019.5月秋招准备\面试题\音乐播放器\3.png)
-
-![4](D:\2019.5月秋招准备\面试题\音乐播放器\4.png)
-
+![image](https://github.com/LilyChenlin/imageStore/blob/master/images/1.png)
+![image](https://github.com/LilyChenlin/imageStore/blob/master/images/2.png)
+![image](https://github.com/LilyChenlin/imageStore/blob/master/images/3.png)
+![image](https://github.com/LilyChenlin/imageStore/blob/master/images/4.png)
 > 发现用的线上QQ音乐接口被关闭了，现在的心情....无法描述....
