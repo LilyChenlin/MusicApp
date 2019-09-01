@@ -21,7 +21,7 @@ export default class Song {
           this.lyric = res.data
           resolve(this.lyric)
         } else {
-          reject('no lyric')
+          reject(new Error('no lyric'))
         }
       })
     })

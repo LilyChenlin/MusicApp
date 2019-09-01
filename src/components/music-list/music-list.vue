@@ -102,7 +102,7 @@ export default {
       })
     },
     random () {
-      this.randomPlay ({
+      this.randomPlay({
         list: this.songs
       })
     },

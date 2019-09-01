@@ -26,3 +26,12 @@ export function emailLogin (email, password) {
   })
   return jsonp(url, data)
 }
+// 尝试带有token的login
+export function tokenLogin (email, password) {
+  const url = '129.204.186.24:8000/api/auth/login'
+  const data = Object.assign({}, {
+    email: email,
+    password: password
+  })
+  return jsonp(url, data)
+}

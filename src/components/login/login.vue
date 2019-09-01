@@ -298,5 +298,5 @@ export default {
         font-size 12px
         margin-top 20px
         text-align center
-        color #999      
+        color #999
 </style>

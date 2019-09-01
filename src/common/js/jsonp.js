@@ -14,7 +14,7 @@ export default function jsonp (url, data, option) {
         }
       })
     } else {
-      console.log('滴滴')
+      // console.log('滴滴')
       axios.get(url).then((res) => {
         // console.log(res.data)
         resolve(res)

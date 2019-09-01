@@ -41,7 +41,7 @@ export default {
       }
     },
     getRankText (index) {
-      if (index > 2 ) {
+      if (index > 2) {
         return index + 1
       }
     }

@@ -57,7 +57,7 @@ export default {
       this.$router.push({
         path: `/rank/${item.id}`
       })
-      //从rank组件存储了数据
+      // 从rank组件存储了数据
       // console.log(item)
       this.setToplist(item)
     },
