@@ -77,13 +77,13 @@ if (config.build.bundleAnalyzerReport) {
 
      由于Loader对文件的转换操作很耗时，所以需要让尽可能少的文件被Loader处理。我们可以通过以下3方面优化Loader配置：（1）优化正则匹配（2）通过cacheDirectory选项开启缓存（3）通过include、exclude来减少被处理的文件。实践如下：
 
-  ```javascript
+ ```javascript
 {
     test: /\.js$/,
     loader: 'babel-loader?cacheDirectory',
     include: [resolve('src'), resolve('test')]
   },
-  ```
+```
   
 
   
@@ -144,6 +144,4 @@ export function debounce (func, delay) {
 
 ```
 
-=======
-> 发现用的线上QQ音乐接口被关闭了，现在的心情....无法描述....
 
