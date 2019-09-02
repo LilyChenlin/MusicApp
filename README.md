@@ -34,7 +34,7 @@ Vue会通过Object.defineProperty对数据进行劫持，来实现视图响应�
 
 - ### 路由懒加载
 
-**存在问题：**Vue时单页面应用，可能会有很多的路由引入，这样使用webpack打包后的文件很大，当进入首页时，加载的资源过多的情况下，可能会出现白屏的情况，不利于用户的体验
+**存在问题：** Vue时单页面应用，可能会有很多的路由引入，这样使用webpack打包后的文件很大，当进入首页时，加载的资源过多的情况下，可能会出现白屏的情况，不利于用户的体验
 
 **解决办法：** 把不同路由对应的组件分割成不同的代码块，然后当路由访问时才加载对应的组件，这样会更加高校
 
@@ -73,9 +73,9 @@ if (config.build.bundleAnalyzerReport) {
 
   - #### 缩小文件的搜索范围
 
-  **1.1 优化Loader配置** https://juejin.im/post/5c1fa158f265da613c09cb36
+**1.1 优化Loader配置** https://juejin.im/post/5c1fa158f265da613c09cb36
 
-     由于Loader对文件的转换操作很耗时，所以需要让尽可能少的文件被Loader处理。我们可以通过以下3方面优化Loader配置：（1）优化正则匹配（2）通过cacheDirectory选项开启缓存（3）通过include、exclude来减少被处理的文件。实践如下：
+由于Loader对文件的转换操作很耗时，所以需要让尽可能少的文件被Loader处理。我们可以通过以下3方面优化Loader配置：（1）优化正则匹配（2）通过cacheDirectory选项开启缓存（3）通过include、exclude来减少被处理的文件。实践如下：
 
  ```javascript
 {
