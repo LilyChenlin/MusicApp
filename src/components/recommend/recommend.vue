@@ -35,12 +35,12 @@
 </template>
 
 <script>
-import {getRecommend, getDiscList} from '../../api/recommend.js'
-import {ERR_OK} from '../../api/config.js'
-import Slider from '../../base/slide/slide.vue'
-import Scroll from '../../base/scroll/scroll'
-import Loading from '../../base/loading/loading'
-import {playListMixin} from '../../common/js/mixin'
+import {getRecommend, getDiscList} from '@/api/recommend.js'
+import {ERR_OK} from '@/api/config.js'
+import Slider from '@/base/slide/slide.vue'
+import Scroll from '@/base/scroll/scroll'
+import Loading from '@/base/loading/loading'
+import {playListMixin} from '@/common/js/mixin'
 import {mapMutations} from 'vuex'
 export default {
   mixins: [playListMixin],
@@ -65,7 +65,7 @@ export default {
     _getRecommend () {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
-          this.recommends = res.data.slider
+          this.recommends = Object.freeze(res.data.slider)
           // console.log(this.recommends)
         }
       })
@@ -80,7 +80,7 @@ export default {
     _getDiscList () {
       getDiscList().then(res => {
         if (res.code === ERR_OK) {
-          this.discList = res.data.list
+          this.discList = Object.freeze(res.data.list)
           // console.log(this.discList)
         }
       })

@@ -58,6 +58,12 @@ module.exports = {
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       },
+      // {
+      //   loader: 'image-webpack-loader',
+      //   options: {
+      //     bypassOnDebug: true
+      //   }
+      // },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',

@@ -85,28 +85,6 @@ export default {
       this.alertShow = false
       this.alertText = ''
     },
-    // async getCode () {
-    //   if (!this.computeTime) {
-    //     this.computeTime = 30
-    //     this.intervalId = setInterval(() => {
-    //       this.computeTime--
-    //       if (this.computeTime <= 0) {
-    //         // 停止计时
-    //         clearInterval(this.intervalId)
-    //       }
-    //     }, 1000)
-    //     // 发送请求 获取验证码
-    //     const result = await getCode(this.phone)
-    //     if (result.code === 200) {
-    //       alert('发送验证码成功')
-    //       if (this.computeTime) {
-    //         this.computeTime = 0
-    //         clearInterval(this.intervalId)
-    //         this.intervalId = undefined
-    //       }
-    //     }
-    //   }
-    // },
     async login () {
       let result
       // 改进login方法
@@ -190,7 +168,7 @@ export default {
     bottom: 0
     z-index: 100
     width: 100%
-    background: $color-background
+    background: $color-highlight-background
     &.slide-enter-active, &.slide-leave-active
       transition: all 0.3s
     &.slide-enter, &.slide-leave-to

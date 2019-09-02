@@ -115,14 +115,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         to: config.build.assetsSubDirectory,
         ignore: ['.*']
       }
-    ]),
-    new SkeletonWebpackPlugin({
-      webpackConfig: {
-        entry: {
-          app: resolve('./src/entry-skeleton.js')
-        }
-      }
-    })
+    ])
   ]
 })
 
